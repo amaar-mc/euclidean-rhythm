@@ -1,5 +1,9 @@
 # euclidean-rhythm
 
+<p align="center">
+  <img src="assets/logo.png" alt="euclidean-rhythm logo" width="160">
+</p>
+
 Generate Euclidean rhythms and analyze them with standard geometric measures, in pure Python with zero dependencies.
 
 ## What are Euclidean rhythms?
