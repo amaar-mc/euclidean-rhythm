@@ -31,7 +31,19 @@ pip install euclidean-rhythm
 ## Quick start
 
 ```python
-from euclidean_rhythm import euclidean, evenness, necklace, rhythmic_oddity, rotate, syncopation
+from euclidean_rhythm import (
+    euclidean,
+    evenness,
+    inter_onset_intervals,
+    ioi_histogram,
+    necklace,
+    offbeatness,
+    onset_positions,
+    pattern_from_onsets,
+    rhythmic_oddity,
+    rotate,
+    syncopation,
+)
 
 # Generate rhythms
 son = euclidean(pulses=3, steps=8)
@@ -59,6 +71,24 @@ syncopation(euclidean(pulses=4, steps=8))
 # Pressing rhythmic oddity
 rhythmic_oddity(son)
 # True
+
+# Off-beat onset count (Toussaint offbeatness)
+offbeatness(son)
+# 1  -- onset at position 3 is off-beat in n=8; 0 and 6 are on-beat
+
+# Inter-onset intervals (gaps in pulses, wrapping)
+inter_onset_intervals(son)
+# [3, 3, 2]  -- sums to 8
+
+# Histogram of inter-onset intervals
+ioi_histogram(son)
+# {3: 2, 2: 1}
+
+# Convert between 0/1 pattern and onset-position list
+onset_positions(son)
+# [0, 3, 6]
+pattern_from_onsets(positions=[0, 3, 6], steps=8)
+# [1, 0, 0, 1, 0, 0, 1, 0]
 ```
 
 ## CLI
@@ -83,6 +113,11 @@ All parameters are keyword-only.
 | `evenness(rhythm)` | Toussaint geometric evenness in (0, 1] |
 | `syncopation(rhythm)` | Keith (1991) syncopation count |
 | `rhythmic_oddity(rhythm)` | Pressing (1983) rhythmic oddity property |
+| `offbeatness(rhythm)` | Count of onsets on off-beat positions (gcd-coprime to n) |
+| `inter_onset_intervals(rhythm)` | Gaps in pulses between consecutive onsets, wrapping |
+| `ioi_histogram(rhythm)` | Histogram of inter-onset interval lengths |
+| `onset_positions(rhythm)` | Indices of onsets in a 0/1 pattern |
+| `pattern_from_onsets(*, positions, steps)` | Build 0/1 pattern from onset indices |
 
 ## Measures defined
 
@@ -96,6 +131,15 @@ the weight difference.
 
 **Rhythmic oddity** (Pressing 1983): True if no two onsets are diametrically opposite
 on the rhythm circle (no pair partitions the cycle into two equal halves).
+
+**Offbeatness** (Toussaint): For a cycle of n pulses, position p is off-beat iff
+gcd(p, n) == 1 -- equivalently, p is not covered by any regular subdivision of the
+cycle (union of {k*n/d} for proper divisors d of n). Offbeatness is the count of onsets
+at such positions. Both characterizations produce identical off-beat sets, verified for
+n in 2..64.
+
+**Inter-onset intervals**: The sequence of gaps (in pulses) between consecutive onsets
+around the cycle, wrapping from the last onset back to the first. Always sums to n.
 
 ## References
 
