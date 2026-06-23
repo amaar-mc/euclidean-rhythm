@@ -4,17 +4,12 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Planned
-- PyPI release (pending new-project quota reset)
-
 ## [0.2.0] - 2026-06-17
 
 ### Added
 - `offbeatness(rhythm)`: Toussaint's offbeatness -- count of onsets landing on off-beat
   positions. Off-beat positions are those p with gcd(p, n) == 1 (equivalently, positions
-  not covered by any regular subdivision). PyPI publish queued behind new-project quota.
+  not covered by any regular subdivision).
 - `inter_onset_intervals(rhythm)`: gaps in pulses between consecutive onsets, wrapping
   around the cycle. Always sums to n. Raises ValueError for zero onsets.
 - `ioi_histogram(rhythm)`: histogram (interval length -> count) of inter-onset intervals.

@@ -21,13 +21,6 @@ musical patterns worldwide.
 pip install euclidean-rhythm
 ```
 
-> PyPI release pending. Install from source:
-> ```sh
-> git clone https://github.com/amaar-mc/euclidean-rhythm
-> cd euclidean-rhythm
-> pip install -e .
-> ```
-
 ## Quick start
 
 ```python
