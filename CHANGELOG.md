@@ -4,6 +4,18 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-06-23
+
+### Added
+- `is_euclidean(rhythm)`: recognizer that returns True iff a rhythm is a rotation of the
+  Euclidean rhythm E(k, n) for its own onset count k and length n. Implemented by
+  comparing canonical necklace forms: necklace(rhythm) == necklace(euclidean(pulses=k,
+  steps=n)). All-rest (k=0) and all-onset (k=n) rhythms are trivially Euclidean. Raises
+  ValueError for empty rhythms or non-0/1 values.
+- `complement(rhythm)`: the rhythmic complement -- swap onsets and rests (1 <-> 0),
+  preserving length. Has n - k onsets and is an involution. The complement of E(k, n) is
+  generally not E(n - k, n). Raises ValueError for non-0/1 values.
+
 ## [0.2.0] - 2026-06-17
 
 ### Added

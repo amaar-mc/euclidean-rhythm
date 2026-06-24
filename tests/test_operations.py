@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+import pytest
 from hypothesis import given, settings
 from hypothesis import strategies as st
 
-from euclidean_rhythm import euclidean, necklace, rotate
+from euclidean_rhythm import complement, euclidean, necklace, rotate
 
 
 def test_rotate_basic() -> None:
@@ -80,3 +81,71 @@ def test_rotate_preserves_onset_count(rhythm: list[int], steps: int) -> None:
 @settings(max_examples=200)
 def test_necklace_rotation_invariant(rhythm: list[int], steps: int) -> None:
     assert necklace(rotate(rhythm, steps=steps)) == necklace(rhythm)
+
+
+# ---------------------------------------------------------------------------
+# complement
+# ---------------------------------------------------------------------------
+
+
+def test_complement_son_clave() -> None:
+    # complement(10010010) == 01101101
+    son = [1, 0, 0, 1, 0, 0, 1, 0]
+    assert complement(son) == [0, 1, 1, 0, 1, 1, 0, 1]
+
+
+def test_complement_empty() -> None:
+    assert complement([]) == []
+
+
+def test_complement_all_rests() -> None:
+    assert complement([0, 0, 0, 0]) == [1, 1, 1, 1]
+
+
+def test_complement_all_onsets() -> None:
+    assert complement([1, 1, 1, 1]) == [0, 0, 0, 0]
+
+
+def test_complement_preserves_length() -> None:
+    r = [1, 0, 1, 1, 0]
+    assert len(complement(r)) == len(r)
+
+
+def test_complement_returns_new_list() -> None:
+    r = [1, 0, 1]
+    c = complement(r)
+    assert c is not r
+    assert r == [1, 0, 1]
+
+
+def test_complement_raises_bad_values() -> None:
+    with pytest.raises(ValueError, match="0 or 1"):
+        complement([1, 0, 2])
+
+
+@given(
+    rhythm=st.lists(st.integers(min_value=0, max_value=1), min_size=0, max_size=32),
+)
+@settings(max_examples=300)
+def test_complement_is_involution(rhythm: list[int]) -> None:
+    # Applying complement twice returns the original rhythm.
+    assert complement(complement(rhythm)) == rhythm
+
+
+@given(
+    rhythm=st.lists(st.integers(min_value=0, max_value=1), min_size=1, max_size=32),
+)
+@settings(max_examples=300)
+def test_complement_onset_count(rhythm: list[int]) -> None:
+    # The complement has n - k onsets.
+    n = len(rhythm)
+    k = sum(rhythm)
+    assert sum(complement(rhythm)) == n - k
+
+
+@given(
+    rhythm=st.lists(st.integers(min_value=0, max_value=1), min_size=0, max_size=32),
+)
+@settings(max_examples=300)
+def test_complement_preserves_length_property(rhythm: list[int]) -> None:
+    assert len(complement(rhythm)) == len(rhythm)

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "euclidean-rhythm"
-version = "0.2.0"
+version = "0.3.0"
 description = "Euclidean rhythms (Bjorklund) with Toussaint evenness, Keith syncopation, and Pressing rhythmic oddity, in pure Python."
 readme = "README.md"
 requires-python = ">=3.10"

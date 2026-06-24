@@ -25,10 +25,12 @@ pip install euclidean-rhythm
 
 ```python
 from euclidean_rhythm import (
+    complement,
     euclidean,
     evenness,
     inter_onset_intervals,
     ioi_histogram,
+    is_euclidean,
     necklace,
     offbeatness,
     onset_positions,
@@ -52,6 +54,18 @@ rotate(son, steps=2)
 # Canonical necklace form (rotation-invariant)
 necklace(son) == necklace(rotate(son, steps=3))
 # True
+
+# Recognize Euclidean rhythms (any rotation of E(k, n))
+is_euclidean(son)
+# True
+is_euclidean(rotate(son, steps=2))
+# True
+is_euclidean([1, 1, 1, 0, 0, 0, 0, 0])  # clustered, not even
+# False
+
+# Rhythmic complement (swap onsets and rests)
+complement(son)
+# [0, 1, 1, 0, 1, 1, 0, 1]
 
 # Evenness (1.0 = maximally even)
 evenness(euclidean(pulses=4, steps=8))
@@ -103,6 +117,8 @@ All parameters are keyword-only.
 | `euclidean(*, pulses, steps)` | Generate Euclidean rhythm (Bjorklund's algorithm) |
 | `rotate(rhythm, *, steps)` | Rotate left by steps (mod len) |
 | `necklace(rhythm)` | Lexicographically minimal rotation (canonical form) |
+| `complement(rhythm)` | Swap onsets and rests (1 <-> 0), preserving length |
+| `is_euclidean(rhythm)` | True iff the rhythm is a rotation of E(k, n) |
 | `evenness(rhythm)` | Toussaint geometric evenness in (0, 1] |
 | `syncopation(rhythm)` | Keith (1991) syncopation count |
 | `rhythmic_oddity(rhythm)` | Pressing (1983) rhythmic oddity property |
@@ -133,6 +149,17 @@ n in 2..64.
 
 **Inter-onset intervals**: The sequence of gaps (in pulses) between consecutive onsets
 around the cycle, wrapping from the last onset back to the first. Always sums to n.
+
+**Is-Euclidean**: A rhythm is Euclidean if it equals some rotation of the canonical
+Euclidean rhythm E(k, n) for its own onset count k and length n. Equivalently,
+`necklace(rhythm) == necklace(euclidean(pulses=k, steps=n))`. This is a test for maximal
+evenness up to rotation; the all-rest (k=0) and all-onset (k=n) rhythms are trivially
+Euclidean.
+
+**Complement**: Swap every onset and rest (1 <-> 0), preserving length. The complement of
+a rhythm with k onsets over n steps has n - k onsets, and applying it twice returns the
+original (an involution). The complement of E(k, n) is generally not E(n - k, n), since
+swapping onsets and rests does not in general preserve maximal evenness.
 
 ## References
 

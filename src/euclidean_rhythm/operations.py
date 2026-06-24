@@ -70,3 +70,43 @@ def necklace(rhythm: list[int]) -> list[int]:
         if candidate < best:
             best = candidate
     return best
+
+
+def complement(rhythm: list[int]) -> list[int]:
+    """Return the rhythmic complement: swap onsets and rests (1 <-> 0).
+
+    Each onset becomes a rest and each rest becomes an onset, preserving the
+    length. The complement of a rhythm with k onsets over n steps has n - k
+    onsets. Applying complement twice returns the original rhythm (it is an
+    involution).
+
+    Note that the complement of the Euclidean rhythm E(k, n) is generally not
+    E(n - k, n): swapping onsets and rests does not in general preserve maximal
+    evenness. For example, the complement of the son clave E(3, 8) =
+    [1, 0, 0, 1, 0, 0, 1, 0] is [0, 1, 1, 0, 1, 1, 0, 1], which is a rotation of
+    E(5, 8) here but not for every k and n.
+
+    Parameters
+    ----------
+    rhythm:
+        A list of 0/1 onset values. May be empty (returns an empty list).
+
+    Returns
+    -------
+    list[int]
+        A new list of the same length with every 0 turned into 1 and every 1
+        turned into 0.
+
+    Raises
+    ------
+    ValueError
+        If any value is not 0 or 1.
+
+    Examples
+    --------
+    >>> complement([1, 0, 0, 1, 0, 0, 1, 0])  # son clave
+    [0, 1, 1, 0, 1, 1, 0, 1]
+    """
+    if any(v not in (0, 1) for v in rhythm):
+        raise ValueError("rhythm values must be 0 or 1")
+    return [1 - v for v in rhythm]
